@@ -1,0 +1,66 @@
+import { event } from "./../../core/Events";
+import { ShapeFactory } from "../../core/ShapeFactory";
+import ShapeModel from "../shape";
+
+export class WorldModel {
+  public shapes: ShapeModel[];
+  public gravity: number;
+  public spawnRate: number;
+  public width: number;
+  public height: number;
+  private factory: ShapeFactory;
+
+  constructor() {
+    this.shapes = [];
+    this.gravity = 2;
+    this.spawnRate = 1;
+    this.width = 800;
+    this.height = 500;
+    this.factory = new ShapeFactory();
+
+    event.on("spawnShape", ({ x, y }: { x: number; y: number }) => {
+      this.addShape(x, y);
+    });
+
+    event.on("deleteShape", ({ id }: { id: number }) => {
+      this.deleteShape(id);
+    });
+
+    event.on("gravityChanged", ({ value }: { value: number }) => {
+      this.setGravity(value);
+    });
+
+    event.on("spawnRateChanged", ({ value }: { value: number }) => {
+      this.setSpawnRate(value);
+    });
+  }
+
+  addShape(x?: number, y?: number) {
+    const shape = this.factory.create(x, y);
+    this.shapes.push(shape);
+  }
+  deleteShape(id: number) {
+    this.shapes = this.shapes.filter((s) => s.data.id !== id);
+  }
+
+  getTotalArea(): number {
+    return this.shapes.reduce((sum, shape) => sum + shape.data.area, 0);
+  }
+
+  update() {
+    for (const shape of this.shapes) {
+      shape.fall(this.gravity);
+    }
+    this.shapes = this.shapes.filter(
+      (shape) => !shape.isOutOfRect(this.height)
+    );
+  }
+
+  setGravity(value: number) {
+    this.gravity = value;
+  }
+
+  setSpawnRate(value: number) {
+    this.spawnRate = value;
+  }
+}
