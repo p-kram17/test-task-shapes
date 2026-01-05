@@ -9,6 +9,8 @@ export class WorldModel {
   public width: number;
   public height: number;
   private factory: ShapeFactory;
+  public spawnSpeed: number;
+  private spawnTimer: number | null = null;
 
   constructor() {
     this.shapes = [];
@@ -17,6 +19,7 @@ export class WorldModel {
     this.width = 800;
     this.height = 500;
     this.factory = new ShapeFactory();
+    this.spawnSpeed = 1000;
 
     event.on("spawnShape", ({ x, y }: { x: number; y: number }) => {
       this.addShape(x, y);
@@ -32,11 +35,13 @@ export class WorldModel {
 
     event.on("spawnRateChanged", ({ value }: { value: number }) => {
       this.setSpawnRate(value);
+      this.setSpawnSpeed(value);
+      this.restartSpawning();
     });
   }
 
   addShape(x?: number, y?: number) {
-    const shape = this.factory.create(x, y);
+    const shape = this.factory.create(this.width, x, y);
     this.shapes.push(shape);
   }
   deleteShape(id: number) {
@@ -56,11 +61,28 @@ export class WorldModel {
     );
   }
 
+  restartSpawning() {
+    if (this.spawnTimer !== null) {
+      clearInterval(this.spawnTimer);
+      this.spawnTimer = null;
+    }
+
+    if (this.spawnRate <= 0) return;
+
+    this.spawnTimer = window.setInterval(() => {
+      this.addShape();
+    }, this.spawnSpeed);
+  }
+
   setGravity(value: number) {
     this.gravity = value;
   }
 
   setSpawnRate(value: number) {
     this.spawnRate = value;
+  }
+
+  setSpawnSpeed(value: number) {
+    this.spawnSpeed = 1000 / value;
   }
 }

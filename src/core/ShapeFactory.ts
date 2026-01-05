@@ -6,15 +6,16 @@ export class ShapeFactory {
 
   private shapeTypes: ShapeType[] = ["circle", "ellipse", "random", "weird"];
 
-  create(x?: number, y?: number, sides?: number): ShapeModel {
+  create(
+    gameWidth: number,
+    x?: number,
+    y?: number,
+    sides?: number
+  ): ShapeModel {
     const width = 100;
     const height = 50;
-    const canvas = document.querySelector("canvas")!;
-    const rect = canvas.getBoundingClientRect();
-    const minX = rect.x;
-    const maxX = rect.width - width;
 
-    const posX = x ?? minX + Math.random() * (maxX - minX);
+    const posX = x ?? Math.random() * gameWidth;
     const posY = y ?? -height;
     const type = this.getRandomType();
     const color = Math.random() * 0xff0000;

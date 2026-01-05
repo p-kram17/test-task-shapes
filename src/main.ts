@@ -11,11 +11,7 @@ const world = new WorldModel();
 const worldView = new WorldView(world, container);
 const controls = new ControlsController();
 
-setInterval(() => {
-  for (let i = 0; i < world.spawnRate; i++) {
-    world.addShape();
-  }
-}, 1000);
+world.restartSpawning();
 
 const ticker = new PIXI.Ticker();
 ticker.add(() => {
