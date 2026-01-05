@@ -30,7 +30,7 @@ export class WorldView {
       0,
       0,
       this.world.width,
-      this.world.height
+      this.world.height,
     );
 
     this.app.stage.on("pointerdown", (e: PIXI.FederatedPointerEvent) => {

@@ -57,7 +57,7 @@ export class WorldModel {
       shape.fall(this.gravity);
     }
     this.shapes = this.shapes.filter(
-      (shape) => !shape.isOutOfRect(this.height)
+      (shape) => !shape.isOutOfRect(this.height),
     );
   }
 

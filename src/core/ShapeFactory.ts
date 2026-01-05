@@ -10,7 +10,7 @@ export class ShapeFactory {
     gameWidth: number,
     x?: number,
     y?: number,
-    sides?: number
+    sides?: number,
   ): ShapeModel {
     const width = 100;
     const height = 50;

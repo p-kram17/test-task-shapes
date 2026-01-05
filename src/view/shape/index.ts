@@ -27,14 +27,6 @@ export class ShapeView {
     const drawFn = drawMap[this.model.data.type];
     if (drawFn) drawFn(this.shape, this.model);
   }
-
-  private calculateArea(): number {
-    const fn = shapeAreaMap[this.data.type];
-    if (fn) return fn(this);
-    // fallback, якщо тип не визначений
-    return this.data.width * this.data.height;
-  }
-
   update() {
     this.shape.position.set(this.model.data.x, this.model.data.y);
   }
