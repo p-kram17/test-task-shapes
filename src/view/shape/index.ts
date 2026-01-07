@@ -28,6 +28,11 @@ export class ShapeView {
     if (drawFn) drawFn(this.shape, this.model);
   }
   update() {
-    this.shape.position.set(this.model.data.x, this.model.data.y);
+    // Update position with radius offset to match how draw() sets it
+    const radius = Math.min(this.model.data.width, this.model.data.height) / 2;
+    this.shape.position.set(
+      this.model.data.x + radius,
+      this.model.data.y + radius,
+    );
   }
 }

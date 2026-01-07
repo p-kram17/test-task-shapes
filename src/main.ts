@@ -14,8 +14,10 @@ const controls = new ControlsController();
 world.restartSpawning();
 
 const ticker = new PIXI.Ticker();
-ticker.add(() => {
-  world.update();
+ticker.add((ticker) => {
+  // Pass deltaTime in milliseconds to world.update()
+  const deltaTime = ticker.deltaMS;
+  world.update(deltaTime);
   worldView.update();
   controls.update(world.shapes.length, world.getTotalArea());
 });

@@ -14,24 +14,19 @@ function drawPolygon(gfx: Graphics, points: number[], color: number) {
   gfx.fill(color);
 }
 
-function generateWeirdPolygon(radius: number, maxPoints = 8): number[] {
+// Helper function to draw a regular polygon
+function drawRegularPolygon(
+  gfx: Graphics,
+  sides: number,
+  radius: number,
+  color: number,
+) {
   const points: number[] = [];
-  const sides = Math.floor(Math.random() * (maxPoints - 3 + 1)) + 3;
-  let angle = 0;
-
   for (let i = 0; i < sides; i++) {
-    const step = ((Math.PI * 2) / sides) * (0.5 + Math.random() * 0.8);
-    angle += step;
-
-    const r = radius * (0.3 + Math.random() * 0.7);
-
-    const offsetX = (Math.random() - 0.2) * radius;
-    const offsetY = (Math.random() - 0.2) * radius;
-
-    points.push(r * Math.cos(angle) + offsetX, r * Math.sin(angle) + offsetY);
+    const angle = (i / sides) * Math.PI * 2;
+    points.push(radius * Math.cos(angle), radius * Math.sin(angle));
   }
-
-  return points;
+  drawPolygon(gfx, points, color);
 }
 
 export const drawMap: Record<string, DrawFn> = {
@@ -48,27 +43,35 @@ export const drawMap: Record<string, DrawFn> = {
     gfx.position.set(model.data.x + rx, model.data.y + ry);
   },
 
-  random: (gfx, model) => {
-    const sides = Math.floor(Math.random() * 4) + 3;
+  triangle: (gfx, model) => {
     const radius = Math.min(model.data.width, model.data.height) / 2;
-    const points: number[] = [];
-
-    for (let i = 0; i < sides; i++) {
-      const angle = (i / sides) * Math.PI * 2;
-      points.push(radius * Math.cos(angle), radius * Math.sin(angle));
-    }
-
-    drawPolygon(gfx, points, model.data.color);
-
+    drawRegularPolygon(gfx, 3, radius, model.data.color);
     gfx.position.set(model.data.x + radius, model.data.y + radius);
   },
 
-  weird: (gfx, model) => {
+  square: (gfx, model) => {
     const radius = Math.min(model.data.width, model.data.height) / 2;
-    const points = generateWeirdPolygon(radius, 8);
+    drawRegularPolygon(gfx, 4, radius, model.data.color);
+    gfx.position.set(model.data.x + radius, model.data.y + radius);
+  },
 
-    drawPolygon(gfx, points, model.data.color);
+  pentagon: (gfx, model) => {
+    const radius = Math.min(model.data.width, model.data.height) / 2;
+    drawRegularPolygon(gfx, 5, radius, model.data.color);
+    gfx.position.set(model.data.x + radius, model.data.y + radius);
+  },
 
+  hexagon: (gfx, model) => {
+    const radius = Math.min(model.data.width, model.data.height) / 2;
+    drawRegularPolygon(gfx, 6, radius, model.data.color);
+    gfx.position.set(model.data.x + radius, model.data.y + radius);
+  },
+
+  random: (gfx, model) => {
+    // Use stored sides from model, or default to 3 if not set
+    const sides = model.data.sides ?? 3;
+    const radius = Math.min(model.data.width, model.data.height) / 2;
+    drawRegularPolygon(gfx, sides, radius, model.data.color);
     gfx.position.set(model.data.x + radius, model.data.y + radius);
   },
 };

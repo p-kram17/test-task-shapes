@@ -1,4 +1,11 @@
-export type ShapeType = "circle" | "ellipse" | "random" | "weird";
+export type ShapeType =
+  | "circle"
+  | "ellipse"
+  | "triangle"
+  | "square"
+  | "pentagon"
+  | "hexagon"
+  | "random";
 
 export interface ShapeData {
   id: number;

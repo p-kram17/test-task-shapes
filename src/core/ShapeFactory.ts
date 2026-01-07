@@ -4,7 +4,15 @@ import { ShapeType } from "../model/shape/type";
 export class ShapeFactory {
   private nextId: number = 0;
 
-  private shapeTypes: ShapeType[] = ["circle", "ellipse", "random", "weird"];
+  private shapeTypes: ShapeType[] = [
+    "circle",
+    "ellipse",
+    "triangle",
+    "square",
+    "pentagon",
+    "hexagon",
+    "random",
+  ];
 
   create(
     gameWidth: number,
@@ -20,6 +28,12 @@ export class ShapeFactory {
     const type = this.getRandomType();
     const color = Math.random() * 0xff0000;
 
+    // Generate random sides for "random" type if not provided (3-6 sides)
+    let randomSides = sides;
+    if (type === "random" && !randomSides) {
+      randomSides = Math.floor(Math.random() * 4) + 3;
+    }
+
     return new ShapeModel({
       id: this.nextId++,
       x: posX,
@@ -28,7 +42,7 @@ export class ShapeFactory {
       height,
       type,
       color,
-      sides,
+      sides: randomSides,
       area: 0,
     });
   }

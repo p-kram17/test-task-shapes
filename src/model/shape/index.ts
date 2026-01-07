@@ -19,8 +19,14 @@ export class ShapeModel {
     return this.data.width * this.data.height;
   }
 
-  isOutOfRect(endY: number) {
-    return this.data.y > endY;
+  isOutOfRect(worldHeight: number) {
+    // Remove shapes that are completely off-screen (above or below)
+    const shapeHeight = this.data.height;
+    // Below screen: shape's top edge is below the bottom of the screen
+    // Above screen: shape's bottom edge is at or above the top of the screen (y=0)
+    // This removes shapes that are completely above the visible area
+    const bottomEdge = this.data.y + shapeHeight;
+    return this.data.y > worldHeight || bottomEdge <= 0;
   }
 }
 

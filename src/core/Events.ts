@@ -5,6 +5,7 @@ type AppEvents = {
   deleteShape: { id: number };
   gravityChanged: { value: number };
   spawnRateChanged: { value: number };
+  recolorShapes: { ids: number[] };
 };
 
 export class EventBus<Events extends EventsMap> {
